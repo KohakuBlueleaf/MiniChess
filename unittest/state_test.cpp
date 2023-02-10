@@ -14,6 +14,7 @@ int main(){
   
   for(int i=0; i<50; i++){
     std::cout << "\n" << i << "step " << (state.player?"black":"white") << "'s turn\n";
+    std::cout << "Score: " << state.evaluate() << "\n";
     auto all_actions = state.legal_actions;
     state = *state.next_state(all_actions[rand() % all_actions.size()]);
     state.print();

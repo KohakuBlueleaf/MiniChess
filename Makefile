@@ -17,7 +17,7 @@ POLICY_DIR = $(SOURCES_DIR)/policy
 TARGET_PLAYER = $(PLAYERS:$(SOURCES_DIR)/player_%.cpp=%)
 TARGET_MAIN = main
 TARGET_OTHER = selfplay benchmark
-TARGET_UNITTEST = $(UNITTESTS:$(UNITTEST_DIR)/%.cpp=%)
+TARGET_UNITTEST = $(UNITTESTS:$(UNITTEST_DIR)/%_test.cpp=%)
 OTHER = action state gamelog.txt
 
 
@@ -29,6 +29,7 @@ merge: |$(MERGE_DIR) $(TARGET_MERGE_PLAYER) $(TARGET_MERGE_MAIN)
 # make build dir if it doesn't exist
 $(BUILD_DIR):
 	mkdir "$(BUILD_DIR)"
+	mkdir "$(UNITTEST_DIR)/build"
 $(MERGE_DIR):
 	mkdir "$(MERGE_DIR)"
 
@@ -40,8 +41,8 @@ $(TARGET_MAIN): % : $(SOURCES_DIR)/%.cpp
 	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/$@.exe $< 
 $(TARGET_OTHER): %: $(SOURCES_DIR)/%.cpp
 	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/$@.exe $(STATE_SOURCE) $(POLICY_DIR)/*.cpp $<
-$(TARGET_UNITTEST): %: $(UNITTEST_DIR)/%.cpp
-	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/$@.exe $(STATE_SOURCE) $<
+$(TARGET_UNITTEST): %: $(UNITTEST_DIR)/%_test.cpp
+	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(UNITTEST_DIR)/build/$@_test.exe $(STATE_SOURCE) $(POLICY_DIR)/*.cpp $<
 else
 $(TARGET_PLAYER): % : $(SOURCES_DIR)/player_%.cpp
 	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/player_$@ $(STATE_SOURCE) $(POLICY_DIR)/$@.cpp $< 
@@ -49,6 +50,6 @@ $(TARGET_MAIN): % : $(SOURCES_DIR)/%.cpp
 	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/$@ $< 
 $(TARGET_OTHER): %: $(SOURCES_DIR)/%.cpp
 	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/$@ $(STATE_SOURCE) $(POLICY_DIR)/*.cpp $<
-$(TARGET_UNITTEST): %: $(UNITTEST_DIR)/%.cpp
-	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/$@ $(STATE_SOURCE) $<
+$(TARGET_UNITTEST): %: $(UNITTEST_DIR)/%_test.cpp
+	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(UNITTEST_DIR)/build/$@_test $(STATE_SOURCE) $(POLICY_DIR)/*.cpp $<
 endif

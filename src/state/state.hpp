@@ -10,7 +10,7 @@ typedef std::pair<size_t, size_t> Point;
 typedef std::pair<Point, Point> Move;
 class Board{
   public:
-    int8_t board[2][5][5] = {{
+    char board[2][5][5] = {{
       //white
       {0, 0, 0, 0, 0},
       {0, 0, 0, 0, 0},

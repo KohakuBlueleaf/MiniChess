@@ -31,7 +31,7 @@ State* State::next_state(Move move){
 
 
 //score of empty, pawn, rook, knight, bishop, queen, king
-static const int score_table[7] = {0, 4, 20, 13, 15, 50, 100000};
+static const int score_table[7] = {0, 4, 20, 13, 15, 50, 1000};
 int State::evaluate(){
   if(this->game_state == WIN){
     return 100000;
@@ -41,8 +41,8 @@ int State::evaluate(){
   
   int self_score=0, oppn_score=0;
   int8_t now_piece;
-  for(int i=0; i<4; i+=1){
-    for(int j=0; j<4; j+=1){
+  for(int i=0; i<5; i+=1){
+    for(int j=0; j<5; j+=1){
       if((now_piece = self_board[i][j])){
         self_score += score_table[now_piece];
       }else if((now_piece = oppn_board[i][j])){
@@ -137,6 +137,7 @@ void State::get_legal_actions(){
               case 2: st=0; end=4; break; //rook
               case 4: st=4; end=8; break; //bishop
               case 5: st=0; end=8; break; //queen
+              default: st=0; end=-1;
             }
             for(int part=st; part<end; part+=1){
               auto move_list = move_table_rook_bishop[part];
