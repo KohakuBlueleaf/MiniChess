@@ -28,8 +28,8 @@ class Board{
 };
 
 enum GameState {
-  UNKNOWN,
-  LOSE,
+  UNKNOWN = 0,
+  WIN,
   DRAW,
   NONE
 };
