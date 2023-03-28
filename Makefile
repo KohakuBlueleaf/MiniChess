@@ -9,12 +9,14 @@ BUILD_DIR = build
 SOURCES = $(wildcard $(SOURCES_DIR)/*.cpp)
 
 MAIN = $(SOURCES_DIR)/main.cpp
-PLAYERS = $(wildcard $(SOURCES_DIR)/player_*.cpp)
+# PLAYERS = $(wildcard $(SOURCES_DIR)/player_*.cpp)
+PLAYERS = $(wildcard $(SOURCES_DIR)/player/*.cpp)
 UNITTESTS = $(wildcard $(UNITTEST_DIR)/*.cpp)
 STATE_SOURCE = $(SOURCES_DIR)/state/state.cpp
 POLICY_DIR = $(SOURCES_DIR)/policy
 
-TARGET_PLAYER = $(PLAYERS:$(SOURCES_DIR)/player_%.cpp=%)
+# TARGET_PLAYER = $(PLAYERS:$(SOURCES_DIR)/player_%.cpp=%)
+TARGET_PLAYER = $(PLAYERS:$(SOURCES_DIR)/player/%.cpp=%)
 TARGET_MAIN = main
 TARGET_OTHER = selfplay benchmark
 TARGET_UNITTEST = $(UNITTESTS:$(UNITTEST_DIR)/%_test.cpp=%)
@@ -35,7 +37,7 @@ $(MERGE_DIR):
 
 # build target
 ifeq ($(OS), Windows_NT)
-$(TARGET_PLAYER): % : $(SOURCES_DIR)/player_%.cpp
+$(TARGET_PLAYER): % : $(SOURCES_DIR)/player/%.cpp
 	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/player_$@.exe $(STATE_SOURCE) $(POLICY_DIR)/$@.cpp $< 
 $(TARGET_MAIN): % : $(SOURCES_DIR)/%.cpp
 	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/$@.exe $< 
@@ -44,7 +46,7 @@ $(TARGET_OTHER): %: $(SOURCES_DIR)/%.cpp
 $(TARGET_UNITTEST): %: $(UNITTEST_DIR)/%_test.cpp
 	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(UNITTEST_DIR)/build/$@_test.exe $(STATE_SOURCE) $(POLICY_DIR)/*.cpp $<
 else
-$(TARGET_PLAYER): % : $(SOURCES_DIR)/player_%.cpp
+$(TARGET_PLAYER): % : $(SOURCES_DIR)/player/%.cpp
 	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/player_$@ $(STATE_SOURCE) $(POLICY_DIR)/$@.cpp $< 
 $(TARGET_MAIN): % : $(SOURCES_DIR)/%.cpp
 	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/$@ $< 

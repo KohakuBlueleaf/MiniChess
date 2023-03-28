@@ -1,5 +1,5 @@
 #pragma once
 #include "timer/timer.hpp"
 
-#define timeout 5
+#define timeout 1
 #define RANDOM_SEED hires_time()

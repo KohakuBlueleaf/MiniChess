@@ -9,8 +9,12 @@ State* State::next_state(Move move){
   Board next = this->board;
   Point from = move.first, to = move.second;
   
+  
   int8_t moved = next.board[this->player][from.first][from.second];
   
+  if(moved==3){
+    // std::cout << "move knight" << std::endl;
+  }
   //promotion for pawn
   if(moved == 1 && (to.first==4 || to.first==0)){
     moved = 5;
@@ -31,10 +35,11 @@ State* State::next_state(Move move){
 
 
 //score of empty, pawn, rook, knight, bishop, queen, king
-static const int score_table[7] = {0, 4, 20, 13, 15, 50, 1000};
+static const int score_table[7] = {0, 3, 6, 10, 17, 29, 100};
 int State::evaluate(){
   if(this->game_state == WIN){
-    return 100000;
+    score = P_MAX;
+    return score;
   }
   auto self_board = this->board.board[this->player];
   auto oppn_board = this->board.board[1 - this->player];
@@ -165,15 +170,15 @@ void State::get_legal_actions(){
           
           case 3: //knight
             for(auto move: move_table_knight){
-              int p[2] = {move[0] + i, move[1] + j};
+              int x = move[0] + i;
+              int y = move[1] + j;
               
-              if(p[0]>4 || p[0]<0 || p[1]>4 || p[1]<0) break;
-              now_piece = self_board[p[0]][p[1]];
+              if(x>4 || x<0 || y>4 || y<0) break;
+              now_piece = self_board[x][y];
               if(now_piece) continue;
+              all_actions.push_back(Move(Point(i, j), Point(x, y)));
               
-              all_actions.push_back(Move(Point(i, j), Point(p[0], p[1])));
-              
-              oppn_piece = oppn_board[p[0]][p[1]];
+              oppn_piece = oppn_board[x][y];
               if(oppn_piece==6){
                 this->game_state = WIN;
                 this->legal_actions = all_actions;

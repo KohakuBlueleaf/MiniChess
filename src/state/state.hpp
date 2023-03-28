@@ -16,10 +16,10 @@ class Board{
       {0, 0, 0, 0, 0},
       {0, 0, 0, 0, 0},
       {1, 1, 1, 1, 1},
-      {2, 3, 4, 5, 6},
+      {6, 5, 2, 3, 4},
     }, {
       //black
-      {6, 5, 4, 3, 2},
+      {4, 3, 2, 5, 6},
       {1, 1, 1, 1, 1},
       {0, 0, 0, 0, 0},
       {0, 0, 0, 0, 0},
@@ -34,12 +34,16 @@ enum GameState {
   NONE
 };
 
+const int M_MAX = -100000;
+const int P_MAX = 100000;
+
 
 class State{
   public: 
     GameState game_state = UNKNOWN;
     Board board;
     int player = 0;
+    int score = -10000000;
     std::vector<Move> legal_actions;
     
     State(){};
