@@ -225,7 +225,7 @@ void State::get_legal_actions(){
               int x = move[0] + i;
               int y = move[1] + j;
               
-              if(x>4 || x<0 || y>4 || y<0) break;
+              if(x>4 || x<0 || y>4 || y<0) continue;
               now_piece = self_board[x][y];
               if(now_piece) continue;
               all_actions.push_back(Move(Point(i, j), Point(x, y)));
@@ -243,7 +243,7 @@ void State::get_legal_actions(){
             for(auto move: move_table_king){
               int p[2] = {move[0] + i, move[1] + j};
               
-              if(p[0]>4 || p[0]<0 || p[1]>4 || p[1]<0) break;
+              if(p[0]>4 || p[0]<0 || p[1]>4 || p[1]<0) continue;
               now_piece = self_board[p[0]][p[1]];
               if(now_piece) continue;
               
@@ -345,10 +345,11 @@ int main(int argc, char** argv) {
   State game; game.get_legal_actions();
   State *temp;
   std::string data;
-  
+  int step=1;
   while (game.game_state == UNKNOWN || game.game_state == NONE) {
     // std::cout << "test\n";
     // Output current state
+    std::cout << step << " step" << std::endl;
     data = game.encode_output();
     std::cout << data << std::endl;
     log << data << std::endl;
@@ -402,6 +403,9 @@ int main(int argc, char** argv) {
       std::cout << action.first.first << " " << action.first.second << " " << action.second.first << " " << action.second.second << "\n";
     }
     game = *temp;
+    
+    step += 1;
+    if(step>MAX_STEP) break;
   }
   log.close();
   
@@ -410,6 +414,8 @@ int main(int argc, char** argv) {
   log << data << std::endl;
   if(game.game_state == WIN)
     std::cout << "Player" << game.player+1 << " wins\n";
+  else
+    std::cout << "Draw\n";
   
   // Reset state file
   if (remove(file_state.c_str()) != 0)

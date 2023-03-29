@@ -173,7 +173,7 @@ void State::get_legal_actions(){
               int x = move[0] + i;
               int y = move[1] + j;
               
-              if(x>4 || x<0 || y>4 || y<0) break;
+              if(x>4 || x<0 || y>4 || y<0) continue;
               now_piece = self_board[x][y];
               if(now_piece) continue;
               all_actions.push_back(Move(Point(i, j), Point(x, y)));
@@ -191,7 +191,7 @@ void State::get_legal_actions(){
             for(auto move: move_table_king){
               int p[2] = {move[0] + i, move[1] + j};
               
-              if(p[0]>4 || p[0]<0 || p[1]>4 || p[1]<0) break;
+              if(p[0]>4 || p[0]<0 || p[1]>4 || p[1]<0) continue;
               now_piece = self_board[p[0]][p[1]];
               if(now_piece) continue;
               
