@@ -38,6 +38,22 @@ void launch_executable(std::string filename) {
 }
 
 
+bool valid_move(Move move, std::vector<Move>& legal_moves){
+  if(move.first.first>BOARD_H || move.first.second>BOARD_H){
+    return false;
+  }
+  if(move.second.first>BOARD_W || move.second.second>BOARD_W){
+    return false;
+  }
+  for(Move mv: legal_moves){
+    if(mv==move){
+      return true;
+    }
+  }
+  return false;
+}
+
+
 int main(int argc, char** argv) {
   assert(argc == 3);
   std::ofstream log("gamelog.txt");
@@ -85,20 +101,14 @@ int main(int argc, char** argv) {
       action.first.second = y;
       action.second.first = n;
       action.second.second = m;
-      //std::cout << "Read: " << x << ", " << y << std::endl;
       total ++;
     }
     fin.close();
 
-    // std::cout << "Put: " << al[p.x] << p.y+1 << "\n";
-    // log << "Put: " << al[p.x] << p.y+1 << "\n";
-    // std::cout << "Depth: " << total << std::endl;
-    // log << "Depth: " << total << std::endl;
-    // Reset action file
     if (remove(file_action.c_str()) != 0)
       std::cerr << "Error removing file: " << file_action << "\n";
     // Take action
-    if (!(temp = game.next_state(action))) {
+    if (!valid_move(action, game.legal_actions)){
       // If action is invalid.
       std::cout << "Invalid Action\n";
       std::cout << action.first.first << " " << action.first.second << " " << action.second.first << " " << action.second.second << "\n";
@@ -107,6 +117,7 @@ int main(int argc, char** argv) {
       log << data;
       break;
     }else{
+      temp = game.next_state(action);
       std::cout << "Depth: " << total << std::endl;
       std::cout << action.first.first << " " << action.first.second << " " << action.second.first << " " << action.second.second << "\n";
     }

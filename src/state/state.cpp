@@ -5,21 +5,16 @@
 #include "../config.hpp"
 
 
-
-bool valid_move(Move move, std::vector<Move>& legal_moves){
-  if(move.first.first>BOARD_H || move.first.second>BOARD_H){
-    return false;
-  }
-  if(move.second.first>BOARD_W || move.second.second>BOARD_W){
-    return false;
-  }
-  for(Move mv: legal_moves){
-    if(mv==move){
-      return true;
-    }
-  }
-  return false;
+/**
+ * @brief evaluate the state
+ * 
+ * @return int 
+ */
+int State::evaluate(){
+  // [TODO] design your own evaluation function
+  return 0;
 }
+
 
 /**
  * @brief return next state after the move
@@ -30,10 +25,6 @@ bool valid_move(Move move, std::vector<Move>& legal_moves){
 State* State::next_state(Move move){
   Board next = this->board;
   Point from = move.first, to = move.second;
-  
-  if(!valid_move(move, legal_actions)){
-    return NULL;
-  }
   
   int8_t moved = next.board[this->player][from.first][from.second];
   //promotion for pawn
@@ -54,30 +45,6 @@ State* State::next_state(Move move){
   return next_state;
 }
 
-
-//score of empty, pawn, rook, knight, bishop, queen, king
-static const int score_table[7] = {0, 3, 8, 10, 13, 29, 100};
-int State::evaluate(){
-  if(this->game_state == WIN){
-    score = P_MAX;
-    return score;
-  }
-  auto self_board = this->board.board[this->player];
-  auto oppn_board = this->board.board[1 - this->player];
-  
-  int self_score=0, oppn_score=0;
-  int8_t now_piece;
-  for(int i=0; i<BOARD_H; i+=1){
-    for(int j=0; j<BOARD_W; j+=1){
-      if((now_piece = self_board[i][j])){
-        self_score += score_table[now_piece];
-      }else if((now_piece = oppn_board[i][j])){
-        oppn_score += score_table[now_piece];
-      }
-    }
-  }
-  return self_score - oppn_score;
-}
 
 static const int move_table_rook_bishop[8][7][2] = {
   {{0, 1}, {0, 2}, {0, 3}, {0, 4}, {0, 5}, {0, 6}, {0, 7}},
@@ -106,6 +73,9 @@ static const int move_table_king[8][2] = {
  * 
  */
 void State::get_legal_actions(){
+  // [Optional]
+  // This method is not very efficient
+  // You can redesign it
   this->game_state = NONE;
   std::vector<Move> all_actions;
   auto self_board = this->board.board[this->player];
@@ -245,26 +215,6 @@ const char piece_table[2][7][5] = {
   {" ", "♙", "♖", "♘", "♗", "♕", "♔"},
   {" ", "♟", "♜", "♞", "♝", "♛", "♚"}
 };
-void State::print(){
-  std::stringstream ss;
-  int now_piece;
-  for(int i=0; i<BOARD_H; i+=1){
-    for(int j=0; j<BOARD_W; j+=1){
-      if((now_piece = this->board.board[0][i][j])){
-        ss << std::string(piece_table[0][now_piece]);
-      }else if((now_piece = this->board.board[1][i][j])){
-        ss << std::string(piece_table[1][now_piece]);
-      }else{
-        ss << " ";
-      }
-      ss << " ";
-    }
-    ss << "\n";
-  }
-  std::cout << ss.str();
-}
-
-
 /**
  * @brief encode the output for command line output
  * 
