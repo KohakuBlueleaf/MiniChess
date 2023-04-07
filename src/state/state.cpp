@@ -6,21 +6,6 @@
 
 
 
-bool valid_move(Move move, std::vector<Move>& legal_moves){
-  if(move.first.first>BOARD_H || move.first.second>BOARD_H){
-    return false;
-  }
-  if(move.second.first>BOARD_W || move.second.second>BOARD_W){
-    return false;
-  }
-  for(Move mv: legal_moves){
-    if(mv==move){
-      return true;
-    }
-  }
-  return false;
-}
-
 /**
  * @brief return next state after the move
  * 
@@ -30,10 +15,6 @@ bool valid_move(Move move, std::vector<Move>& legal_moves){
 State* State::next_state(Move move){
   Board next = this->board;
   Point from = move.first, to = move.second;
-  
-  if(!valid_move(move, legal_actions)){
-    return NULL;
-  }
   
   int8_t moved = next.board[this->player][from.first][from.second];
   //promotion for pawn

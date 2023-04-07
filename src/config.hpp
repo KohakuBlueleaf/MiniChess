@@ -6,5 +6,5 @@
 #define BOARD_W 5
 
 #define RANDOM_SEED 123
-#define timeout 1
+#define timeout 3
 #define MAX_STEP 60
