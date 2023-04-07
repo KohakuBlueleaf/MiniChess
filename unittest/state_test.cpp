@@ -11,21 +11,13 @@ int main(){
   State state;
   state.print();
   state.get_legal_actions();
-  
-  for(int i=0; i<50; i++){
-    std::cout << "\n" << i << "step " << (state.player?"black":"white") << "'s turn\n";
-    std::cout << "Score: " << state.evaluate() << "\n";
-    auto all_actions = state.legal_actions;
-    state = *state.next_state(all_actions[rand() % all_actions.size()]);
-    state.print();
-    if(state.game_state == WIN){
-      std::cout << "\n" << i+1 << "step " << (state.player?"black":"white") << " WIN!\n";
-      auto win_action = state.legal_actions.back();
-      std::cout << win_action.first.first << ", " << win_action.first.second << " → "\
-                << win_action.second.first << ", " << win_action.second.second << "\n";
-      state = *state.next_state(win_action);
-      state.print();
-      break;
+  for(auto move: state.legal_actions){
+    std::cout << move.first.first << " " << move.first.second << " " << move.second.first << " " << move.second.second << "\n";
+    auto temp = state.next_state(move);
+    if(temp != NULL){
+      temp->print();
+    }else{
+      std::cout << "NULL\n";
     }
   }
   return 0;

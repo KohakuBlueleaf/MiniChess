@@ -1,6 +1,6 @@
 CXX = g++
 CXX_MERGE = cpp-merge
-CXXFLAGS = --std=c++17
+CXXFLAGS = --std=c++20 -Wall -Wextra -O3
 
 SOURCES_DIR = src
 UNITTEST_DIR = unittest
@@ -36,20 +36,20 @@ $(MERGE_DIR):
 # build target
 ifeq ($(OS), Windows_NT)
 $(TARGET_PLAYER): % : $(SOURCES_DIR)/player/%.cpp
-	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/player_$@.exe $(STATE_SOURCE) $(POLICY_DIR)/$@.cpp $< 
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/player_$@.exe $(STATE_SOURCE) $(POLICY_DIR)/$@.cpp $< 
 $(TARGET_MAIN): % : $(SOURCES_DIR)/%.cpp
-	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/$@.exe $< 
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/$@.exe $(STATE_SOURCE) $< 
 $(TARGET_OTHER): %: $(SOURCES_DIR)/%.cpp
-	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/$@.exe $(STATE_SOURCE) $(POLICY_DIR)/*.cpp $<
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/$@.exe $(STATE_SOURCE) $(POLICY_DIR)/*.cpp $<
 $(TARGET_UNITTEST): %: $(UNITTEST_DIR)/%_test.cpp
-	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(UNITTEST_DIR)/build/$@_test.exe $(STATE_SOURCE) $(POLICY_DIR)/*.cpp $<
+	$(CXX) $(CXXFLAGS) -o $(UNITTEST_DIR)/build/$@_test.exe $(STATE_SOURCE) $(POLICY_DIR)/*.cpp $<
 else
 $(TARGET_PLAYER): % : $(SOURCES_DIR)/player/%.cpp
-	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/player_$@ $(STATE_SOURCE) $(POLICY_DIR)/$@.cpp $< 
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/player_$@ $(STATE_SOURCE) $(POLICY_DIR)/$@.cpp $< 
 $(TARGET_MAIN): % : $(SOURCES_DIR)/%.cpp
-	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/$@ $< 
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/$@ $(STATE_SOURCE) $< 
 $(TARGET_OTHER): %: $(SOURCES_DIR)/%.cpp
-	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(BUILD_DIR)/$@ $(STATE_SOURCE) $(POLICY_DIR)/*.cpp $<
+	$(CXX) $(CXXFLAGS) -o $(BUILD_DIR)/$@ $(STATE_SOURCE) $(POLICY_DIR)/*.cpp $<
 $(TARGET_UNITTEST): %: $(UNITTEST_DIR)/%_test.cpp
-	$(CXX) -Wall -Wextra -O2 $(CXXFLAGS) -o $(UNITTEST_DIR)/build/$@_test $(STATE_SOURCE) $(POLICY_DIR)/*.cpp $<
+	$(CXX) $(CXXFLAGS) -o $(UNITTEST_DIR)/build/$@_test $(STATE_SOURCE) $(POLICY_DIR)/*.cpp $<
 endif
