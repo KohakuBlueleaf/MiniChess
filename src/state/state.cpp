@@ -38,7 +38,7 @@ State* State::next_state(Move move){
 
 
 //score of empty, pawn, rook, knight, bishop, queen, king
-static const int score_table[7] = {0, 3, 8, 10, 13, 29, 100};
+static const int score_table[7] = {0, 2, 6, 7, 8, 20, 100};
 int State::evaluate(){
   if(this->game_state == WIN){
     score = P_MAX;
