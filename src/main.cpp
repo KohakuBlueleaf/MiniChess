@@ -5,6 +5,7 @@
 #include <array>
 #include <vector>
 #include <cassert>
+#include <cstdint>
 
 #include "config.hpp"
 
@@ -260,8 +261,8 @@ void State::get_legal_actions(){
 
 
 const char piece_table[2][7][5] = {
+  {" ", "♟", "♜", "♞", "♝", "♛", "♚"},
   {" ", "♙", "♖", "♘", "♗", "♕", "♔"},
-  {" ", "♟", "♜", "♞", "♝", "♛", "♚"}
 };
 /**
  * @brief encode the output for command line output
@@ -271,19 +272,24 @@ const char piece_table[2][7][5] = {
 std::string State::encode_output(){
   std::stringstream ss;
   int now_piece;
+  ss << "┌───┬───┬───┬───┬───┬─┬───┐\n";
   for(int i=0; i<BOARD_H; i+=1){
     for(int j=0; j<BOARD_W; j+=1){
+      ss << "│ ";
       if((now_piece = this->board.board[0][i][j])){
-        ss << std::string(piece_table[0][now_piece]);
+        ss << std::string(piece_table[0][now_piece]) << " ";
       }else if((now_piece = this->board.board[1][i][j])){
-        ss << std::string(piece_table[1][now_piece]);
+        ss << std::string(piece_table[1][now_piece]) << " ";
       }else{
-        ss << " ";
+        ss << "  ";
       }
-      ss << " ";
     }
-    ss << "\n";
+    ss << "│ │ " << i << " │\n";
+    ss << "├───┼───┼───┼───┼───┼─┼───┤\n";
   }
+  ss << "├───┼───┼───┼───┼───┼─┼───┤\n";
+  ss << "│ 0 │ 1 │ 2 │ 3 │ 4 │ │   │\n";
+  ss << "└───┴───┴───┴───┴───┴─┴───┘";
   return ss.str();
 }
 
@@ -356,6 +362,7 @@ bool valid_move(Move move, std::vector<Move>& legal_moves){
 }
 
 
+static const int material_table[7] = {0, 2, 6, 7, 8, 20, 100};
 int main(int argc, char** argv) {
   assert(argc == 3);
   std::ofstream log("gamelog.txt");
@@ -426,7 +433,31 @@ int main(int argc, char** argv) {
     game = *temp;
     
     step += 1;
-    if(step>MAX_STEP) break;
+    if(step>MAX_STEP){
+      int white_material = 0;
+      int black_material = 0;
+      int piece;
+      
+      for(size_t i=0; i<BOARD_H; i+=1){
+        for(size_t j=0; j<BOARD_W; j+=1){
+          if((piece=game.board.board[0][i][j])){
+            white_material += material_table[piece];
+          }
+          if((piece=game.board.board[1][i][j])){
+            black_material += material_table[piece];
+          }
+        }
+      }
+      if(white_material>black_material){
+        game.player = 1;
+        game.game_state = WIN;
+      }else if(white_material<black_material){
+        game.player = 0;
+        game.game_state = WIN;
+      }else{
+        game.game_state = DRAW;
+      }
+    }
   }
   log.close();
   
