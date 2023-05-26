@@ -5,6 +5,7 @@
 #include <array>
 #include <vector>
 #include <cassert>
+#include <cstdint>
 
 #include "config.hpp"
 

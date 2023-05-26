@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <cstdint>
 
 #include "./state.hpp"
 #include "../config.hpp"
