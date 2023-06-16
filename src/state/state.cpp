@@ -90,12 +90,13 @@ static const int move_table_king[8][2] = {
 void State::get_legal_actions(){
   this->game_state = NONE;
   std::vector<Move> all_actions;
-  auto self_board = this->board.board[this->player];
-  auto oppn_board = this->board.board[1 - this->player];
+  #define self_board (this->board.board[this->player])
+  #define oppn_board (this->board.board[1 - this->player])
   
   int now_piece, oppn_piece;
   for(int i=0; i<BOARD_H; i+=1){
     for(int j=0; j<BOARD_W; j+=1){
+    
       if((now_piece=self_board[i][j])){
         // std::cout << this->player << "," << now_piece << ' ';
         switch (now_piece){
